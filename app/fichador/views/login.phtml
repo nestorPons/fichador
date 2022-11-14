@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title id="loginTile">Control horario</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+
+    <!-- quita css de seleccion en explorer!-->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- quita barra navegacion!-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+    <meta name="theme-color" content="#<?= COLOR_MAIN ?>">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#<?= COLOR_MAIN ?>">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#<?= COLOR_MAIN ?>">
+    <!--  manifest -->
+    <link rel="manifest" href="./manifest.json.php?nombre_empresa=Le%20Bouquet%20Esteticacolor_main=#<?= COLOR_MAIN ?>>
+        
+        <!--favicon-->
+        <link rel=" apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
+    <link rel="mask-icon" href="./img/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+
+    <link id="styles" rel="stylesheet" type="text/css" href="./css/index.min.css?ver=<?= VERSION ?>">
+    <script src="./js/min/login.js?ver=<?= VERSION ?>" async></script>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <title id="loginTile">Control horario</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+
+        <!-- quita css de seleccion en explorer!-->
+        <meta name="msapplication-tap-highlight" content="no">
+        <!-- quita barra navegacion!-->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+        <meta name="theme-color" content="#<?= COLOR_MAIN ?>">
+        <!-- Windows Phone -->
+        <meta name="msapplication-navbutton-color" content="#<?= COLOR_MAIN ?>">
+        <!-- iOS Safari -->
+        <meta name="apple-mobile-web-app-status-bar-style" content="#<?= COLOR_MAIN ?>">
+        <!--  manifest -->
+        <link rel="manifest" href="../manifest.json.php?nombre_empresa=Le%20Bouquet%20Esteticacolor_main=#<?= COLOR_MAIN ?>">
+
+        <link id="styles" rel="stylesheet" type="text/css" href="../css/bundle?ver=<?= VERSION ?>">
+        <link id="styles" rel="stylesheet" type="text/css" href="../css/style.css?ver=<?= VERSION ?>">
+        <link id="styles" rel="stylesheet" type="text/css" href="../<?= APP_NAME ?>/src/css/style.css?ver=<?=VERSION?>">
+
+        <script src="../src/js/login.js?ver=<?=VERSION?>" async></script>
+    </head>
+
+    <body>
+
+        <section id="secLogin">
+            <a href="https://www.lebouquet.es" target="_blank">
+                <img id="logo" src="src/img/logo.png" alt="logo image">
+            </a>
+            <h1 class="heading">Control horario</h1>
+            <hr>
+            <form id="loginUsuario" defaultbutton="Entrar" data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña." data-popover-background="bg-red" data-popover-color="fg-white">
+                <div class="iconClass-container icon-left">
+                    <input type="text" class="text" id="user" name="user" placeholder="Introduzca su usuario" value="" require="true">
+                    <i class="iconClass-inside icon-mail-1"></i>
+                </div>
+                <div class="iconClass-container icon-left">
+                    <input type="password" id="pass" name="pass" placeholder="Introduzca su contraseña" value="" require="true">
+                    <i class="iconClass-inside icon-eye"></i>
+                </div>
+                <div id="chkNoCerrarSesion">
+                    <input type="checkbox" id="recordar" name="recordar" value="1">
+                    <span class="info">Recordar usuario.</span>
+                </div>
+
+                <button class="btn-success btnLoad" id="btnLogin" value="Entrar" default="" disabled="">Entrar</button>
+
+            </form>
+        </section>
+
+    </body>
+    <footer></footer>
+
+    </html>
+</body>
+<footer></footer>
+
+</html>

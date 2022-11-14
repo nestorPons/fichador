@@ -1,0 +1,29 @@
+{
+    "name": "nestorpons/tpv",
+    "description": "Aplicacion web de autentifición sin base de datos",
+    "type": "project",
+    "license": "MIT",
+    "authors": [{
+        "name": "Nestor Pons",
+        "email": "nestorpons@gmail.com"
+    }],
+    "require": {
+        "firebase/php-jwt": "^5.0",
+        "vlucas/phpdotenv": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Admin\\WooApi\\": "src/",
+            "": "htdocs/",
+            "app\\": "app/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "phpunit/phpunit": "^9.1"
+    }
+}
