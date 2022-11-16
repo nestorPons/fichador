@@ -57,8 +57,9 @@
         <link id="styles" rel="stylesheet" type="text/css" href="../css/bundle?ver=<?= VERSION ?>">
         <link id="styles" rel="stylesheet" type="text/css" href="../css/style.css?ver=<?= VERSION ?>">
         <link id="styles" rel="stylesheet" type="text/css" href="../<?= APP_NAME ?>/src/css/style.css?ver=<?=VERSION?>">
-
-        <script src="../src/js/login.js?ver=<?=VERSION?>" async></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="./src/js/login.js?ver=<?=VERSION?>" async></script>
     </head>
 
     <body>
@@ -69,22 +70,19 @@
             </a>
             <h1 class="heading">Control horario</h1>
             <hr>
-            <form id="loginUsuario" defaultbutton="Entrar" data-role="popover" data-popover-position="top" data-popover-text="Error en nombre o la contraseña." data-popover-background="bg-red" data-popover-color="fg-white">
-                <div class="iconClass-container icon-left">
-                    <input type="text" class="text" id="user" name="user" placeholder="Introduzca su usuario" value="" require="true">
+            <form id="loginUsuario" method="POST" defaultbutton="Entrar">
+                <div class="input">
+                    <label for="user" class="info">Introduzca su nombre de usuario</label>
+                    <input type="text" class="text" id="user" name="user" value="" require="true" minlength="2">
                     <i class="iconClass-inside icon-mail-1"></i>
                 </div>
-                <div class="iconClass-container icon-left">
-                    <input type="password" id="pass" name="pass" placeholder="Introduzca su contraseña" value="" require="true">
+                <div class="input">
+                    <label for="pass" class="info">Introduzca su contraseña</label>
+                    <input type="password" id="pass" name="pass" value="" require="true">
                     <i class="iconClass-inside icon-eye"></i>
                 </div>
-                <div id="chkNoCerrarSesion">
-                    <input type="checkbox" id="recordar" name="recordar" value="1">
-                    <span class="info">Recordar usuario.</span>
-                </div>
-
-                <button class="btn-success btnLoad" id="btnLogin" value="Entrar" default="" disabled="">Entrar</button>
-
+                <button class="" id="singin"  value="singin"  name="action">Entrada</button>
+                <button class="" id="singout" value="singout" name="action">Salida</button>
             </form>
         </section>
 

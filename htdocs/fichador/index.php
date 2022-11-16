@@ -12,14 +12,13 @@ define('FOLDER_APP' ,   FOLDER_ROOT     . "app/" . APP_NAME . "/");
 define('FOLDER_CORE' ,  FOLDER_APP      . "core/" );
 define('FOLDER_VENDOR', FOLDER_ROOT     . 'vendor/');
 define('FOLDER_VIEWS',  FOLDER_APP      . 'views/');
+define('FOLDER_MODELS',  FOLDER_APP      . 'models/');
 
 //Se inicia session que esta en clase segurity
 $url_base = str_replace('htdocs', '', $_SERVER['DOCUMENT_ROOT']);
 //configuracion general 
 require(FOLDER_VENDOR . 'autoload.php');
-$file_env = $_SERVER["HTTP_HOST"] == "localhost" ? '.env.local' : '.env';
-$dotenv = Dotenv\Dotenv::createImmutable(FOLDER_ROOT, $file_env);
-$env = $dotenv->load();
+
 $conf = parse_ini_file(FOLDER_APP . "config/conf.ini");
-$router = new \app\fichador\core\Controller(FOLDER_VIEWS, 'login' , 'phtml', $conf);
-$router->route();
+$router = new \app\fichador\core\Controller(FOLDER_VIEWS, FOLDER_MODELS, 'login' , 'phtml', $conf);
+$router->route($_REQUEST);

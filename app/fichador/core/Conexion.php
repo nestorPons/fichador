@@ -1,4 +1,9 @@
 <?php
+
+namespace app\fichador\core;
+
+use \Dotenv\{Dotenv};
+
 class Conexion extends BaseClass
 {
 	private $conexion, $sql;
@@ -11,20 +16,29 @@ class Conexion extends BaseClass
 		$type,
 		$db;
 
-	function __construct(array $credentials, $log = false)
+	function __construct(string $db_name, ?string $table = null, ?bool $log = false)
 	{
 		parent::__construct($log);
-		$this->credentials = $credentials;
-		$this->connect();
+		$this->connect($db_name);
+		$this->table($table);
 	}
-	public function connect(): self
+	private function load_data_conection(): self
 	{
+		$arr = explode('/', $_SERVER['DOCUMENT_ROOT']);
+		$folder_root = str_replace(array_pop($arr), '', $_SERVER['DOCUMENT_ROOT']);
+		// Carga de la libreria para las variables de entorno
+		$this->credentials = Dotenv::createImmutable($folder_root)->load();
+		return $this;
+	}
+	private function connect(string $db_name = null): self
+	{
+		$this->load_data_conection();
 		$this->log('CONECTING AT DATABASE...');
 		if ($this->conexion = mysqli_connect(
 			$this->credentials['DATABASE_HOST'],
 			$this->credentials['DATABASE_USER'],
 			$this->credentials['DATABASE_PASS'],
-			$this->credentials['DATABASE_NAME'],
+			$db_name,
 			$this->credentials['DATABASE_PORT']
 		)) {
 			$this->log('CONECTED!');
@@ -42,50 +56,74 @@ class Conexion extends BaseClass
 		$this->query("SHOW TABLES");
 		$result = $this->return;
 		$this->return = [];
-		while ($table = mysqli_fetch_array($result)) {
-			$this->return[] = $table[0];
+		foreach ($result as $key => $value) {
+			$this->return[] = $value;
 		}
 		return $this;
 	}
-	public function query($sql): self
+	/**
+	 *  Si la consulta SQL contiene un SELECT o SHOW, devolverá un arreglo conteniendo todas las filas del resultado
+	 *	Si la consulta SQL es un DELETE, INSERT o UPDATE, retornará el número de filas afectadas
+	 *
+	 *  @param  string $sql
+	 *	@param  array  $params
+	 *	@param  int    $fetchmode
+	 *	@return mixed
+	 */
+
+	public function query(string $sql, $params = null) : self
 	{
-		$this->log('SQL REQUEST...');
-		$this->return = [];
-		$result = mysqli_query($this->conexion, $sql)
-			or throw new \Exception(mysqli_error($this->conexion));
-		
-		if(is_bool($result)){
-			$this->return = mysqli_affected_rows($this->conexion);
-		}else{
-			while ($row = mysqli_fetch_assoc($result)) {
-				$this->return[] = $row;
-			}
+
+		$this->sql = trim(str_replace("\r", " ", $sql));
+		/* var_dump($this->sql, $params); 
+        die(); */
+		// Prepara la sentencia con sus parametros y la inicia
+		$respond = $this->init($params);
+
+		$rawStatement = explode(" ", preg_replace("/\s+|\t+|\n+/", " ", $this->sql));
+		# Determina el tipo de SQL 
+		$statement = strtolower($rawStatement[0]);
+		if ($statement === 'select' || $statement === 'show') {
+			$this->return = $this->sqlPrepare->fetchAll(\PDO::FETCH_ASSOC);
+		} elseif ($statement === 'insert' || $statement === 'update' || $statement === 'delete') {
+			$this->return = $this->sqlPrepare->rowCount();
+		} else {
+			$this->return = $respond;
 		}
+
 		return $this;
 	}
-	public function table(string $table): self
+	public function table(string $table = null): string
 	{
-		$this->log('GET TABLE');
-		$this->table = $table;
-		$this->query("SELECT * FROM $table");		
-		return $this;
+		if ($table) $this->table = $table;
+		return $this->table;
 	}
-	public function select(string $sql = "*") : self
+	public function select(string $sql = "*"): self
 	{
 		$this->log('SELECT VALUES : ', $sql);
 		$this->sql = str_replace('*', $sql, $this->sql);
 		return $this;
 	}
-	public function filter( string $sql = "") : self 
+	public function filter(string $sql = ""): self
 	{
 		$this->log('FILTER BY : ', $sql);
 		$this->sql .= ' WHERE ' . $sql . ";";
 		return $this;
 	}
-	public function get() : mixed
-    {
-        return $this->return;
-    }
+	public function get(): mixed
+	{
+		return $this->return;
+	}
+	/**
+	 * Devuelve datos de una peticion por algun campo del registro
+	 */
+	public function getBy($field, $value, string $order = 'id'): self
+	{
+		$this->return = $this->query("SELECT * FROM {$this->table} WHERE $field LIKE '$value'  ORDER BY $order;");
+		var_dump($this->return);
+		exit;
+		return $this;
+	}
 	/********* */
 	//Funcion original multi query 
 	//La que hay que usar por defecto

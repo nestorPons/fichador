@@ -1,6 +1,6 @@
 <?php
-
 namespace app\fichador\core;
+use \app\fichador\models\{User};
 
 /**
  * Clase controladora que devuelve una vista o devuelve datos
@@ -10,15 +10,17 @@ class Controller
 {
     private string $main_view;
     private string $folder_view;
+    private string $folder_model;
     private string $ext_view;
     private array $env; 
     // Se declara la pagina de inicio de la aplicación
     
-    function __construct(string $folder_view, string $main_view, string $ext_view, array $env)
+    function __construct(string $folder_view, string $folder_model, string $main_view, string $ext_view, array $env)
     {
         // Configuración variables de la aplicación
         $this->main_view = $main_view; 
         $this->folder_view = $folder_view;
+        $this->folder_model = $folder_model;
         $this->ext_view = $ext_view;        
         $this->env = $env;
     }
@@ -28,15 +30,32 @@ class Controller
      */
     public function route($request = null): void
     {
-
         if ($request) {
-            var_dump('Solicita datos');
+            // Solicitud de entrada de datos
+            if($_POST){
+                // Fichando entrada o salida
+                if(in_array("action",array_keys($request))){
+                    if($request['action'] == 'singin'){
+                        $user = new User($request['user']);
+                        if($user->pass() === $request['pass']){
+                            echo 'AUTORIZADO';
+                        } else {
+                            echo 'NO AUTORIZADO';
+                        }
+                    }
+                }
+            }else{
+                var_dump('Solicita vista');
+            }
+
+            exit();
         }else{
             // Inicio de aplicación
 
             $this->load_view($this->main_view, $this->env); 
         }
     }
+
     /**
      * Carga la vista
      */

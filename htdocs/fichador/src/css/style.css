@@ -1,6 +1,5 @@
 form {
     margin: auto;
-
 }
 
 .heading {
@@ -19,9 +18,24 @@ input[type="password"],
 button {
     width: 100%;
     height: 2rem;
-    margin: 1rem 0;
 }
 
+button {
+    cursor: pointer;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+button,
 #chkNoCerrarSesion {
-    margin: 1rem 0;
+    margin-bottom: 1rem;
+}
+
+.input label {
+    float: left;
+}
+
+div#chkNoCerrarSesion {
+    text-align: left;
 }

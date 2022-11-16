@@ -1,4 +1,4 @@
-<?php
+<?php namespace app\fichador\core;
 class BaseClass
 {
     protected $return;
@@ -10,6 +10,7 @@ class BaseClass
 	}
 	public function print(): self
 	{
+		$this->log('Imprimiendo resultados...');
 		if (is_array($this->return)) {
 			foreach ($this->return as $key => $value) {
 				print('<pre>');
