@@ -1,12 +1,15 @@
 <?php namespace app\fichador\core;
 class BaseClass
 {
+	protected const LOGON = true;
     protected $return;
 	protected bool $logon;
+	protected string $FOLDER_ROOT;
 
-	function __construct(bool $log = false)
+	static protected function FOLDER_ROOT() : string
 	{
-		$this->logon = $log;
+		$arr = explode('/', $_SERVER['DOCUMENT_ROOT']);
+        return str_replace(array_pop($arr), '', $_SERVER['DOCUMENT_ROOT']);
 	}
 	public function print(): self
 	{
@@ -33,15 +36,15 @@ class BaseClass
     }
 	protected function log(...$menssages): void
     {
-        if ($this->logon) {
+        if (self::LOGON) {
             foreach ($menssages as $mens) {
                 print('<pre>');
-                var_dump($mens);
+                print_r($mens);
                 print('</pre>');
             }
         }
     }
-	public function save_file(string $file = 'src/tmp.log'): void {
+	public function save_log(string $file = 'src/tmp.log'): void {
 		$result = file_put_contents($file, print_r($this->return, true));
 		if ($result === false) 
 			throw new \Exception("Error guardado el archivo!!");

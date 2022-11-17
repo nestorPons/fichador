@@ -1,12 +1,9 @@
 <?php
 
 namespace app\fichador\core;
-
-use \Dotenv\{Dotenv};
-
 /**
  * La clase maestra para el acceso a la base de datos 
- * aquí se rehaliza la conexión y se dota de todos los atributos y métodos a las clases hijas  
+ * aquí se realiza la conexión y se dota de todos los atributos y métodos a las clases hijas  
  * para la conexion y tratamiento de datos
  */
 class Conn extends BaseClass
@@ -23,7 +20,6 @@ class Conn extends BaseClass
 
     function __construct(string $db_name, string $table, ?bool $log = false)
     {
-        parent::__construct($log);
         if ($table) $this->table($table);
 
         $this->connect($db_name);
@@ -38,12 +34,12 @@ class Conn extends BaseClass
      */
     private function connect(string $db_name = null): self
     {
-        $arr = explode('/', $_SERVER['DOCUMENT_ROOT']);
-        $folder_root = str_replace(array_pop($arr), '', $_SERVER['DOCUMENT_ROOT']);
-        // Carga de la libreria para las variables de entorno
-        $credentials = Dotenv::createImmutable($folder_root)->load();
-        $dsn = 'mysql:dbname=' . $db_name . ';host=' . $credentials['DATABASE_HOST'] . ';port=' . $credentials['DATABASE_PORT'];
 
+        // Carga de la libreria para las variables de entorno
+        $credentials = Confiles::get_env(self::FOLDER_ROOT());
+        $dsn = 'mysql:dbname=' . $db_name . ';host=' . $credentials['DATABASE_HOST'] . ';port=' . $credentials['DATABASE_PORT'];
+        
+    
         $this->pdo = new \PDO(
             $dsn,
             $credentials['DATABASE_USER'],
@@ -172,8 +168,8 @@ class Conn extends BaseClass
             "SELECT * FROM {$this->table} WHERE $column BETWEEN '$val1' AND '$val2' $filters order_by;"
         );
     }
-    // Añadimos un registro devuelve el id del registro
-    public function add(array $params, $del_id = true)
+
+    public function insert(array $params, $del_id = true) : self
     {
         if ($del_id) unset($params['id']);
         $strCol = '';
@@ -186,8 +182,12 @@ class Conn extends BaseClass
         $strPre = trim($strPre, ',');
 
         if ($this->query("INSERT INTO {$this->table} ($strCol) VALUES ($strPre);", $params)) {
-            return (int)$this->pdo->lastInsertId();
-        } else return false;
+            $this->return = ['success' => true, 'id' => (int)$this->pdo->lastInsertId()];
+        } else {
+            $this->return =  ['success' => false ];
+        }
+
+        return $this;
     }
     // Funcion para mostrar solo los atributos publicos desde dentro de la clase
     public function getVars(): array

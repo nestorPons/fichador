@@ -7,28 +7,37 @@ form {
 }
 
 #secLogin {
-    width: 320px;
+    width: 300px;
     text-align: center;
     margin: auto;
 }
 
 input[type="text"],
 input[type="email"],
-input[type="password"],
-button {
-    width: 100%;
+input[type="password"] {
+    width: 98%;
     height: 2rem;
 }
 
 button {
     cursor: pointer;
+    width: 100%;
+    height: 2.5rem;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-button,
-#chkNoCerrarSesion {
+button#singin {
+    background-color: #C6A882;
+    border: 1px white solid;
+    color: white;
+}
+
+button#singout {
+    background-color: #9ECEB4;
+    border: 1px white solid;
+    color: white;
+}
+
+.input {
     margin-bottom: 1rem;
 }
 

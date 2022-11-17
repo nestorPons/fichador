@@ -6,7 +6,7 @@ use \app\fichador\models\{User};
  * Clase controladora que devuelve una vista o devuelve datos
  * 
  */
-class Controller
+class Controller extends BaseClass
 {
     private string $main_view;
     private string $folder_view;
@@ -35,14 +35,16 @@ class Controller
             if($_POST){
                 // Fichando entrada o salida
                 if(in_array("action",array_keys($request))){
-                    if($request['action'] == 'singin'){
+                    
                         $user = new User($request['user']);
                         if($user->pass() === $request['pass']){
-                            echo 'AUTORIZADO';
-                        } else {
-                            echo 'NO AUTORIZADO';
-                        }
+                            $this->log('Autorizado!');
+                            $this->log('Guardando registro...');
+                            $user->save_record($request['action']);
+                            $user->send_email();
                     }
+                } else {
+                    echo 'NO AUTORIZADO';
                 }
             }else{
                 var_dump('Solicita vista');

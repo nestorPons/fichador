@@ -4,7 +4,6 @@ ini_set('display_errors', '1');
 //Establecemos zona horaria por defecto
 date_default_timezone_set('Europe/Madrid');
 
-session_start(); 
 define('APP_NAME', 'fichador');
 $arr = explode('/', $_SERVER['DOCUMENT_ROOT'] ) ;
 define('FOLDER_ROOT' , str_replace(array_pop($arr),'',$_SERVER['DOCUMENT_ROOT']) );
