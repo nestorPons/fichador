@@ -1,9 +1,8 @@
 <?php namespace app\fichador\core;
 class BaseClass
 {
-	protected const LOGON = true;
+	protected const LOGON = FALSE;
     protected $return;
-	protected bool $logon;
 	protected string $FOLDER_ROOT;
 
 	static protected function FOLDER_ROOT() : string

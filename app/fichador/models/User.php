@@ -57,7 +57,7 @@ class User extends BaseClass
         
         //Server settings
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->SMTPDebug  = 1;                                       // Enable verbose debug output
+        $mail->SMTPDebug  = self::LOGON;                                       // Enable verbose debug output
         $mail->isSMTP();                                            // Set mailer to use SMTP
         $mail->Host       = $credentials['EMAIL_HOST'];                       // Specify main and backup SMTP servers
         $mail->Username   = $credentials['EMAIL_USER'];                           // SMTP username

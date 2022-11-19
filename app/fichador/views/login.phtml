@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <title id="loginTile">Control horario</title>
-        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
-        
-        <!-- quita css de seleccion en explorer!-->
-        <meta name="msapplication-tap-highlight" content="no">
-        <!-- quita barra navegacion!-->
+
+<head>
+    <title id="loginTile">Control horario</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+
+    <!-- quita css de seleccion en explorer!-->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- quita barra navegacion!-->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- Chrome, Firefox OS, Opera and Vivaldi -->
     <meta name="theme-color" content="#<?= COLOR_MAIN ?>">
@@ -19,18 +20,21 @@
     <!--  manifest -->
     <link rel="manifest" href="../manifest.json.php?nombre_empresa=Le%20Bouquet%20Esteticacolor_main=#<?= COLOR_MAIN ?>">
 
-    <link id="styles" rel="stylesheet" type="text/css" href="../css/bundle?ver=<?= VERSION ?>">
-    <style><?= include FOLDER_CSS . 'style.css'?></style>
-    
+    <link id="styles" rel="stylesheet" type="text/css" href="./css/bundle.css?ver=<?= VERSION ?>">
+    <style>
+        <?= include FOLDER_CSS . 'style.css' ?>
+    </style>
+
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js" integrity="sha512-szJ5FSo9hEmXXe7b5AUVtn/WnL8a5VofnFeYC2i2z03uS2LhAch7ewNLbl5flsEmTTimMN0enBZg/3sQ+YOSzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+
 </head>
+
 <body>
     <section id="secLogin">
         <div class="error-login <?= error_login ?>">Error en nombre de usuario o contraseña</div>
         <a href="https://www.lebouquet.es" target="_blank">
-            <img id="logo" src="data:image/png;base64,<?php echo base64_encode(file_get_contents(FOLDER_IMG . 'logo.png'))?>" alt="logo image">
+            <img id="logo" src="data:image/png;base64,<?php echo base64_encode(file_get_contents(FOLDER_IMG . 'logo.png')) ?>" alt="logo image">
         </a>
         <h1 class="heading">Control horario</h1>
         <hr>
@@ -50,7 +54,14 @@
         </form>
     </section>
     <script>
-        <?= include FOLDER_JS . 'login.js'?>
+        $('body').on('submit', '#loginUsuario ', function(e) {
+
+            var hash = sha256.create();
+            hash.update($(this).find('[type="password"]').val());
+
+            $(this).find('[type="password"]').val(sha256.hmac('key', $(this).find('[type="password"]').val()))
+        })
+
         $('div.error-login.inherit').on('click', function() {
             $(this).removeClass('inherit')
         })
