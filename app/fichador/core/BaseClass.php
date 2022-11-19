@@ -39,7 +39,8 @@ class BaseClass
         if (self::LOGON) {
             foreach ($menssages as $mens) {
                 print('<pre>');
-                print_r($mens);
+                print('log:');
+				print_r($mens);
                 print('</pre>');
             }
         }

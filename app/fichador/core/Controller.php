@@ -1,10 +1,11 @@
 <?php
+
 namespace app\fichador\core;
+
 use \app\fichador\models\{User};
 
 /**
  * Clase controladora que devuelve una vista o devuelve datos
- * 
  */
 class Controller extends BaseClass
 {
@@ -12,17 +13,17 @@ class Controller extends BaseClass
     private string $folder_view;
     private string $folder_model;
     private string $ext_view;
-    private array $env; 
+    private array $conf;
     // Se declara la pagina de inicio de la aplicación
-    
-    function __construct(string $folder_view, string $folder_model, string $main_view, string $ext_view, array $env)
+
+    function __construct(string $folder_view, string $folder_model, string $main_view, string $ext_view, array $conf)
     {
         // Configuración variables de la aplicación
-        $this->main_view = $main_view; 
+        $this->main_view = $main_view;
         $this->folder_view = $folder_view;
         $this->folder_model = $folder_model;
-        $this->ext_view = $ext_view;        
-        $this->env = $env;
+        $this->ext_view = $ext_view;
+        $this->conf = $conf;
     }
 
     /**
@@ -30,31 +31,34 @@ class Controller extends BaseClass
      */
     public function route($request = null): void
     {
-        if ($request) {
-            // Solicitud de entrada de datos
-            if($_POST){
-                // Fichando entrada o salida
-                if(in_array("action",array_keys($request))){
-                    
-                        $user = new User($request['user']);
-                        if($user->pass() === $request['pass']){
-                            $this->log('Autorizado!');
-                            $this->log('Guardando registro...');
-                            $user->save_record($request['action']);
-                            $user->send_email();
+        if (!$request) {
+            // Inicio de loginç
+            $this->conf['error_login'] = '';
+            $this->load_view($this->main_view, $this->conf);
+        } else {
+            if ($_POST) {
+                if (in_array("action", array_keys($request))) {
+                    // Se solicita una petición de login
+                    $user = new User($request['user']);
+                    // Login y password
+                    if ($user->pass() === $request['pass']) {
+                        // ZONA AUTORIZADA
+                        $this->log('Autorizado!');
+                        $user->load_record($request['action']);
+                        //$user->save_record();
+                        $user->send_email();
+                        $action_name  = $request['action'] == 'singin' ? 'Entrada' : 'Salida';
+                        $this->load_view('main', ['ACTION' => $action_name]);
+                    } else {
+                        // NO AUTORIZADO
+                        $_REQUEST = [];
+                        $this->conf['error_login'] = 'inherit';
+                        $this->load_view($this->main_view, $this->conf);
                     }
-                } else {
-                    echo 'NO AUTORIZADO';
                 }
-            }else{
-                var_dump('Solicita vista');
+            } else {
+                var_dump('Solicita vista o datos');
             }
-
-            exit();
-        }else{
-            // Inicio de aplicación
-
-            $this->load_view($this->main_view, $this->env); 
         }
     }
 
@@ -63,17 +67,13 @@ class Controller extends BaseClass
      */
     public function load_view(string $view, $data = null): void
     {
-        try {
-            if ($data){
-                foreach($data as $key => $value){
-                    define($key, $value);
-                }
+        if ($data) {
+            foreach ($data as $key => $value) {
+                define($key, $value);
             }
-            $path = $this->folder_view . $view . '.' . $this->ext_view;
-            include($path);
-        } catch (\Exception $e) {
-            echo 'No se ha encontrado la ruta: ',  $e->getMessage(), "\n";
         }
+        $path = $this->folder_view . $view . '.' . $this->ext_view;
+        include($path);
     }
 
     /**
@@ -87,19 +87,22 @@ class Controller extends BaseClass
     /** 
      * GETTERS AND SETTERS
      */
-    public function main_view(string $value = null){
-        $name_fun = explode('::',__METHOD__)[1];
-        if($value) $this->{$name_fun} = $value;
+    public function main_view(string $value = null)
+    {
+        $name_fun = explode('::', __METHOD__)[1];
+        if ($value) $this->{$name_fun} = $value;
         return $this->{$name_fun};
     }
-    public function ext_view(string $value = null){
-        $name_fun = explode('::',__METHOD__)[1];
-        if($value) $this->{$name_fun} = $value;
+    public function ext_view(string $value = null)
+    {
+        $name_fun = explode('::', __METHOD__)[1];
+        if ($value) $this->{$name_fun} = $value;
         return $this->{$name_fun};
     }
-    public function folder_view(string $value = null){
-        $name_fun = explode('::',__METHOD__)[1];
-        if($value) $this->{$name_fun} = $value;
+    public function folder_view(string $value = null)
+    {
+        $name_fun = explode('::', __METHOD__)[1];
+        if ($value) $this->{$name_fun} = $value;
         return $this->{$name_fun};
     }
     function getAuth()

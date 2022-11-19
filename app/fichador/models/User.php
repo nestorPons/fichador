@@ -29,15 +29,21 @@ class User extends BaseClass
         }
         return $this;
     }
-    public function save_record(string $action): self
+    public function load_record(string $action) : self
     {
-        $conn = new Conn('singin', 'sings', self::LOGON);
-        $action = $action == 'singin' ? 1 : 0;
         $action_name  = $action == 'singin' ? 'Entrada' : 'Salida';
         $hash = hash('sha256', $this->id  . $action . date('U'));
         $date = date('Y-m-d H:i:s'); 
-        $this->event = ['action'=>$action_name, 'date'=>$date, 'hash'=>$hash ];
-        $conn->insert(['id_employee' => $this->id, 'action' => $action, 'date_time' => $date, 'hash' => $hash])->print();
+        $action = $action == 'singin' ? 1 : 0;
+        $this->event = ['action'=>$action, 'action_name'=>$action_name, 'date'=>$date, 'hash'=>$hash ];
+        
+        return $this;
+    }
+    public function save_record(): self
+    {
+        $conn = new Conn('singin', 'sings', self::LOGON);
+        [$action, $an, $date, $hash] = $this->event;
+        $conn->insert(['id_employee'=>$this->id, 'action'=>$action, 'date_time'=>$date, 'hash' => $hash]);
         $this->return = $conn->return['success'] ? $hash : null;
 
         return $this;
@@ -60,6 +66,7 @@ class User extends BaseClass
         $mail->Port       = $credentials['EMAIL_PORT'];                                    // TCP port to connect to
         $mail->From       = $credentials['EMAIL_USER'];
         $mail->FromName   = $credentials['EMAIL_FROM'];
+        $mail->SetFrom($credentials['EMAIL_USER']);
         
         //config 
         $mail->CharSet = 'UTF-8';

@@ -48,3 +48,19 @@ button#singout {
 div#chkNoCerrarSesion {
     text-align: left;
 }
+
+div.error-login {
+    display: none;
+    position: fixed;
+    background: red;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 5px;
+
+}
+
+div.error-login.inherit {
+    display: inherit;
+    cursor: pointer;
+}

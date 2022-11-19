@@ -146,7 +146,7 @@ class Conn extends BaseClass
         }
         $sql = "SELECT * FROM {$this->table} WHERE $filters  order_by;";
         $this->query($sql);
-        $this->return = $this->return[0];
+        if(isset($this->return[0])) $this->return = $this->return[0];
         return $this;
     }
     // Devuelve datos de una peticion por una consulta sql
